@@ -1,4 +1,6 @@
 #!/bin/sh 
+mkdir -p /tmp/.kube/
+touch /tmp/.kube/config
 export KUBECONFIG=/tmp/.kube/config
 oc login --token=`cat /var/run/secrets/kubernetes.io/serviceaccount/token` https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT --insecure-skip-tls-verify
 oc delete pod --field-selector=status.phase==Failed --all-namespaces > /tmp/pods
