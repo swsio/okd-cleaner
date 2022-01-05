@@ -15,22 +15,15 @@ oc get job -n openshift-logging -o=jsonpath='{.items[?(@.status.failed==1)].meta
 LINECOUNTFAILEDJOBS=`wc -l /tmp/jobsfailed | awk '{print $1}'`
 if [ $LINECOUNTFAILEDJOBS -gt 1 ]; then
     oc delete job -n openshift-logging $(oc get job -n openshift-logging -o=jsonpath='{.items[?(@.status.failed==1)].metadata.name}') > /tmp/jobs
+    echo "No Jobs found, nothing to do!"
 else
     echo "No failed Jobs found"
 fi
 
 # Cleanup Output
 LINECOUNT=`wc -l /tmp/pods | awk '{print $1}'`
-LINECOUNTJOBS=`wc -l /tmp/jobs | awk '{print $1}'`
 if [ $LINECOUNT -gt 1 ]; then
     echo "Cleaned Pods!"
 else
     echo "No Pods found, nothing to do!"
-fi
-
-if [ $LINECOUNTJOBS -gt 1 ]; then
-    echo "Cleaned Jobs!"
-else
-    echo "No Jobs found, nothing to do!"
-
 fi
