@@ -12,7 +12,7 @@ oc delete pod --field-selector=status.phase==Failed --all-namespaces > /tmp/pods
 
 # Delete failed Jobs
 oc get job -n openshift-logging -o=jsonpath='{.items[?(@.status.failed==1)].metadata.name}' > /tmp/jobsfailed
-LINECOUNTFAILEDJOBS=`wc -l /tmp/jobsfailed | awk '{print $1}'`
+LINECOUNTFAILEDJOBS=`oc get job -n openshift-logging -o=jsonpath='{.items[?(@.status.failed==1)].metadata.name}' |wc| awk '{print $2}'`
 if [ $LINECOUNTFAILEDJOBS -gt 1 ]; then
     oc delete job -n openshift-logging $(oc get job -n openshift-logging -o=jsonpath='{.items[?(@.status.failed==1)].metadata.name}') > /tmp/jobs
     echo "No Jobs found, nothing to do!"
